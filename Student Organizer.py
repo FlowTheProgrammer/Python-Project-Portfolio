@@ -4,14 +4,27 @@ print("Welcome to Student Grade Organizer!")
 print()
 print()
 
-#Modify to only accept int without crash
-howMany = int(input("How Many Students Are In Your Class?"))
+#Negative int == 0
+while True:
+    try: 
+        howMany = int(input("How Many Students Are In Your Class?"))
+        break
+    except ValueError:
+        print("Invalid Input: Please input a number")
+        print()
+
 count = 0
 
-#Modify to only accept int without crash
+#Modify to only accept int from 0-100
 while count < howMany:
     studentName = input("Enter a student name.")
-    studentGrade = int(input("Enter a grade for the student?"))
+    while True:
+        try: 
+            studentGrade = int(input("Enter a grade for the student?"))
+            break
+        except ValueError:
+            print("Invalid Input: Please input a number")
+            print()
     print()
     myStudents[studentName] = studentGrade
     count += 1
