@@ -4,9 +4,11 @@ print("Welcome to Student Grade Organizer!")
 print()
 print()
 
+#Modify to only accept int without crash
 howMany = int(input("How Many Students Are In Your Class?"))
 count = 0
 
+#Modify to only accept int without crash
 while count < howMany:
     studentName = input("Enter a student name.")
     studentGrade = int(input("Enter a grade for the student?"))
@@ -14,11 +16,12 @@ while count < howMany:
     myStudents[studentName] = studentGrade
     count += 1
 
+#Add more functions
 def printMenu():
     print()
-    print("List of Students")
-    print("Change a student's grade")
-    print("Add/Remove a student")
+    print("1. List of Students")
+    print("2. Change a student's grade")
+    print("3. Add/Remove a student")
     print()
 
 def executeMenu(x):
@@ -26,6 +29,8 @@ def executeMenu(x):
         printStudents()
     if x == "2":
         changeGrade()
+    if x == "3":
+        addOrDrop()
 
 def getLetterGrade(x):
     if x >= 97:
@@ -73,7 +78,7 @@ def changeGrade():
     found = False
     for key, values in myStudents.items():
         if changeName == key:
-            new_grade = print("What is the new grade for", changeName + "?")
+            new_grade = int(input("What is the new grade for " + changeName + "?"))
             myStudents[key] = new_grade
             found = True
             break
@@ -81,17 +86,51 @@ def changeGrade():
         print("Name not Found")
 
 
+def addOrDrop():
+    print()
+    print("Add or Drop Students")
+    print("----------------------")
+    print()
+    choice = input("Do you want to add or drop a student to your roster?: ")
+    while choice != "Add"  and choice != "add" and choice != "Drop" and choice != "drop":
+        print("Invalid input")
+        print()
+        choice = input("Do you want to add or drop a student to your roster")
+    if choice == "Add" or choice == "add":
+        print()
+        studentName = input("Enter a new student's name: ")
+        found = False
+        for key, values in myStudents.items():
+            if studentName == key:
+                print("Student is already in the system")
+                found = True
+                break
+        if found == False:
+            myStudents[studentName] = 0
+            print("Added Student:", studentName)
+    if choice == "Drop" or choice == "drop":
+        print()
+        studentName = input("Enter a student's name to drop: ")
+        found = False
+        for key, values in myStudents.items():
+            if studentName == key:
+                print("Removed:", studentName)
+                del myStudents[studentName]
+                found = True
+                break
+        if found == False:
+            print("There was no student found by the name:", studentName)
 
 printMenu()
-userOption = input("Choose an option:")
+userOption = input("Choose an option number:")
 while userOption != "Quit"  and userOption != "quit":
     if userOption != "1" and userOption != "2" and userOption != "3":
         print("Invalid Option")
-        userOption = input("Choose an option:")
+        userOption = input("Choose an option number:")
     else:
         executeMenu(userOption)
         printMenu()
-        userOption = input("Choose an option:")
+        userOption = input("Choose an option number:")
 
 
 
