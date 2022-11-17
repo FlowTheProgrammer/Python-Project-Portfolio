@@ -15,7 +15,6 @@ while True:
 
 count = 0
 
-#Modify to only accept int from 0-100
 while count < howMany:
     studentName = input("Enter a student name.")
     while True:
