@@ -21,6 +21,17 @@ while count < howMany:
     while True:
         try: 
             studentGrade = int(input("Enter a grade for the student?"))
+            while studentGrade < 0 or studentGrade > 100:
+                while True:
+                    try: 
+                        print()
+                        print("Enter a number from 0-100")
+                        print()
+                        studentGrade = int(input("Enter a grade for the student?"))
+                        break
+                    except ValueError:
+                        print("Invalid Input: Please input a number")
+                        print()
             break
         except ValueError:
             print("Invalid Input: Please input a number")
@@ -78,7 +89,7 @@ def printStudents():
     print("                      Student Roster")
     print("     ----------------------------------------------------") 
     print()
-    for key, values in myStudents.items():
+    for key, values in sorted(myStudents.items()):
         print("Student Name:", key, "     Student Grade:", values, "     Student Letter Grade:", getLetterGrade(values))
 
 def changeGrade():
