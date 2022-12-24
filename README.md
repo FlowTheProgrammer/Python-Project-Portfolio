@@ -1,3 +1,3 @@
 # Projects
 
-Mini Python Products
+Mini Python Projects
