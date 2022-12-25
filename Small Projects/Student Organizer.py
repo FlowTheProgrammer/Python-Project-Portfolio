@@ -1,3 +1,6 @@
+#Add GUI
+#Add Clearing
+
 myStudents= {}
 
 print("Welcome to Student Grade Organizer!")
