@@ -1,6 +1,12 @@
-#Add GUI
-#Add Clearing
+"""
+TO DO:
 
+Add GUI
+Add Clearing
+Add more functions
+"""
+
+#INIT Student Dict
 myStudents= {}
 
 print("Welcome to Student Grade Organizer!")
@@ -8,6 +14,7 @@ print()
 print()
 
 #Negative int == 0
+#Ask users for amount of students
 while True:
     try: 
         howMany = int(input("How Many Students Are In Your Class?"))
@@ -17,7 +24,7 @@ while True:
         print()
 
 count = 0
-
+#Asks the user to create (num) student profiles; num depending on priot input
 while count < howMany:
     studentName = input("Enter a student name.")
     while True:
@@ -42,7 +49,6 @@ while count < howMany:
     myStudents[studentName] = studentGrade
     count += 1
 
-#Add more functions
 def printMenu():
     print()
     print("1. List of Students")
@@ -50,6 +56,7 @@ def printMenu():
     print("3. Add/Remove a student")
     print()
 
+#Calls different functions based on user input
 def executeMenu(x):
     if x == "1":
         printStudents()
@@ -58,6 +65,7 @@ def executeMenu(x):
     if x == "3":
         addOrDrop()
 
+# Converts numerical grade to letter grade
 def getLetterGrade(x):
     if x >= 97:
         return "A+"
@@ -86,6 +94,7 @@ def getLetterGrade(x):
     elif x <= 59:
         return "F"
         
+#Prints out the entire roster of students    
 def printStudents():
     print()
     print("                      Student Roster")
@@ -94,6 +103,8 @@ def printStudents():
     for key, values in sorted(myStudents.items()):
         print("Student Name:", key, "     Student Grade:", values, "     Student Letter Grade:", getLetterGrade(values))
 
+#Function used to change a students grade
+#If name is not found, nothing will happen
 def changeGrade():
     print()
     print("Change A Students Grade")
@@ -111,7 +122,8 @@ def changeGrade():
     if found == False:
         print("Name not Found")
 
-
+#Function used to add or drop a student from the roster
+#Has a print function in place if student name is not found
 def addOrDrop():
     print()
     print("Add or Drop Students")
@@ -147,6 +159,7 @@ def addOrDrop():
         if found == False:
             print("There was no student found by the name:", studentName)
 
+#Executes Code
 printMenu()
 userOption = input("Choose an option number:")
 while userOption != "Quit"  and userOption != "quit":
