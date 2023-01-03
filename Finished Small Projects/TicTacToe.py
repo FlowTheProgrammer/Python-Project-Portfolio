@@ -1,3 +1,5 @@
+#Add replayability
+
 import os
 
 #Welcome Message :)
@@ -90,5 +92,3 @@ while game_on:
         os.system('cls')
         game_board = replacement_choice(game_board, pos, player2)
         game_on = checkWin(game_board,player1,player2)
-
-#Add replayability
