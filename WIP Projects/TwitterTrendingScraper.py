@@ -12,7 +12,7 @@ print("-------------------------------")
 while True:
         try: 
             trend_number = int(input("How many trending items would you like to grab?: \n"))
-            while trend_number < 1 or code_number > 30:
+            while trend_number < 1 or trend_number > 30:
                 while True:
                     try: 
                         print()
