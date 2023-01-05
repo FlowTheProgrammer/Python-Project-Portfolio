@@ -1,7 +1,8 @@
 """
 Simple tip calculator
-Simple Arithmetic Pythong
-Beginner Project: There are no try/except or loops
+Simple Arithmetic Python
+Beginner Project: 
+There are no try/except or loops
 Assume correct inputs
 """
 
