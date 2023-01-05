@@ -1,3 +1,10 @@
+"""
+Simple Crazy 8-like game
+
+* Wild Card not implimented (Impliment if starting card is an eight to reshuffle deck)
+* Special case where the program will crash if players have all cards and one of them tries to draw when there is only one card in play
+"""
+
 import random
 import os
 
@@ -63,7 +70,7 @@ class Pile:
     def return_one_card(self):
         return self.cards.pop(0)
      
-#Displays Player 1's view (# of Opp. Cards, card in play and cards in hand) (Functional)
+#Displays Player 1's view (# of Opp. Cards, card in play and cards in hand)
 def player_one_view(player1,player2,pile):
     print(f"Player 2 has {len(player2.cards)} cards\n")
     print(f"The card in play is {str(pile.cards[-1])}")
@@ -73,7 +80,7 @@ def player_one_view(player1,player2,pile):
         hand.append(str(card))
     print(hand)
 
-#Displays Player 2's view (# of Opp. Cards, card in play and cards in hand) (Functional)
+#Displays Player 2's view (# of Opp. Cards, card in play and cards in hand)
 def player_two_view(player2,player1,pile):
     print(f"Player 1 has {len(player1.cards)} cards\n")
     print(f"The card in play is {str(pile.cards[-1])}")
@@ -83,7 +90,7 @@ def player_two_view(player2,player1,pile):
         hand.append(str(card))
     print(hand)
 
-#Checks to see if either player has won (Haven't checked)
+#Checks to see if either player has won
 def checkWin(player1,player2):
     if player1.cards == []:
         return False
@@ -92,7 +99,7 @@ def checkWin(player1,player2):
     else:
         return True
 
-#Function that allows the player to either choose to play or draw (Functional)
+#Function that allows the player to either choose to play or draw
 def choice(player,pile,deck): 
     while True:
         user_input = input("Would you like to play a card or draw. Input 'draw' or 'play'")
@@ -110,7 +117,7 @@ def choice(player,pile,deck):
 
 
 
-#Function to allow the player to play a card (Functional)
+#Function to allow the player to play a card
 def player_play(player,pile,deck):
     playable_cards = []
     for i in player.cards:
@@ -142,7 +149,7 @@ def player_play(player,pile,deck):
 
 
 
-#Function to allow a player to draw a card (Functional)
+#Function to allow a player to draw a card
 def player_draw(player,pile,deck):
     player.add_card(deck.deal_one_card())
     print("You new hand is: ")
@@ -152,16 +159,17 @@ def player_draw(player,pile,deck):
     print(hand)
     null = input("\n Press Enter when you want to end your turn.")
 
-#Reshuffles deck from pile if out of cards (Haven't checked)
+#Reshuffles deck from pile if out of cards in deck
 def check_deck_count(deck,pile):
-    if deck.allCards == 0:
-        for i in len(pile.cards) - 1:
-            deck.reshuffle(pile.return_one_card)
+    if deck.allCards == []:
+        for i in range(len(pile.cards) - 1):
+            deck.reshuffle(pile.return_one_card())
+        deck.shuffle_deck()
     else:
         pass
 
 
-#Init
+#Init (Sets up deck, discard pile and player hands)
 while True:
     print("Welcome to Crazy Eights")
     newDeck = Deck()
@@ -175,7 +183,7 @@ while True:
     discard_pile.add_card(newDeck.deal_one_card())
     break
 
-
+#Game Logic - Player Turns
 Playing = True
 while Playing:
     os.system('cls')
@@ -193,4 +201,20 @@ while Playing:
         choice(player_two_hand,discard_pile,newDeck)
         Playing = checkWin(player_one_hand,player_two_hand)
         check_deck_count(newDeck,discard_pile)
-    break #Remove when done
+
+#Game Logic - Decides winner
+os.system("cls")
+if player_one_hand.cards == []:
+    print("Player1  Won!")
+    print("------------")
+    if len(player_two_hand.cards) == 1:
+        print(f"Player Two had {len(player_two_hand.cards)} card left!")
+    else:
+        print(f"Player Two had {len(player_two_hand.cards)} cards left!")
+elif player_two_hand.cards == []:
+    print("Player 2 Won!")
+    print("------------")
+    if len(player_two_hand.cards) == 1:
+        print(f"Player One had {len(player_one_hand.cards)} card left!")
+    else:
+        print(f"Player One had {len(player_one_hand.cards)} cards left!")
