@@ -2,7 +2,6 @@
 Simple Crazy 8-like game
 
 * Wild Card not implimented (Impliment if starting card is an eight to reshuffle deck)
-* Special case where the program will crash if players have all cards and one of them tries to draw when there is only one card in play
 """
 
 import random
@@ -39,8 +38,12 @@ class Deck():
     def shuffle_deck(self):
         random.shuffle(self.allCards)
     
-    def deal_one_card(self):
-        return self.allCards.pop()
+    def deal_one_card(self, player=[], pile=[], deck=[]):
+        try:
+            return self.allCards.pop()
+        except:
+            print("No cards in deck, you must play a card")
+            player_play(player,pile,deck)
     
     def reshuffle(self,card):
         self.allCards.append(card)
@@ -151,7 +154,7 @@ def player_play(player,pile,deck):
 
 #Function to allow a player to draw a card
 def player_draw(player,pile,deck):
-    player.add_card(deck.deal_one_card())
+    player.add_card(deck.deal_one_card(player,pile,deck))
     print("You new hand is: ")
     hand = []
     for card in player.cards:
