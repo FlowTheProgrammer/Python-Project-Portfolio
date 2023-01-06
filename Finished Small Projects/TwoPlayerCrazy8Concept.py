@@ -1,14 +1,12 @@
 """
 Simple Crazy 8-like game
 
-* Wild Card not implimented (Impliment if starting card is an eight to reshuffle deck)
+* Wild Card not implimented
 """
 
 import random
 import os
 
-values = {'Two':2, 'Three':3, 'Four':4, 'Five':5, 'Six':6, 'Seven':7, 'Eight':8, 
-            'Nine':9, 'Ten':10, 'Jack':11, 'Queen':12, 'King':13, 'Ace':1}
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs') 
 ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace') 
 
@@ -18,7 +16,6 @@ class Card():
     def __init__(self,suit,rank):
         self.suit = suit
         self.rank = rank
-        self.values = values[rank]
 
     def __str__ (self):
         return f'{self.rank} of {self.suit}'
@@ -174,7 +171,6 @@ def check_deck_count(deck,pile):
 
 #Init (Sets up deck, discard pile and player hands)
 while True:
-    print("Welcome to Crazy Eights")
     newDeck = Deck()
     newDeck.shuffle_deck()
     player_one_hand = Hand()
@@ -184,12 +180,18 @@ while True:
         player_one_hand.add_card(newDeck.deal_one_card())
         player_two_hand.add_card(newDeck.deal_one_card())
     discard_pile.add_card(newDeck.deal_one_card())
+    if discard_pile.cards[-1].rank == "Eight":
+        stop = input("I still work")
+        newDeck.reshuffle(discard_pile.return_one_card())
+        newDeck.shuffle_deck()
+        discard_pile.add_card(newDeck.deal_one_card())
     break
 
 #Game Logic - Player Turns
 Playing = True
 while Playing:
     os.system('cls')
+    print("Welcome to Crazy Eights\n")
     null = input("Player 1 press enter to when ready!")
     os.system('cls')
     player_one_view(player_one_hand,player_two_hand,discard_pile)
