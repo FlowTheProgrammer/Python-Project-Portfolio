@@ -1,7 +1,14 @@
 """
-Simple Crazy 8-like game
+Simple Crazy Eights-like game
 
 * Wild Card not implimented (Calling suits)
+* Pick-up/Put-down not implimented (A player should be able given the option to place down a card if they picked up a card of matching suit/rank as the card in play)
+
+House Rules:
+
+Player can either pick up one card or play a card
+A player doesn't need to draw until they get a useable card
+Winner is determined by the first person to get rid of all their cards
 """
 
 import random
