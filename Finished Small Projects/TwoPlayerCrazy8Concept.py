@@ -1,7 +1,7 @@
 """
 Simple Crazy 8-like game
 
-* Wild Card not implimented
+* Wild Card not implimented (Calling suits)
 """
 
 import random
@@ -121,7 +121,7 @@ def choice(player,pile,deck):
 def player_play(player,pile,deck):
     playable_cards = []
     for i in player.cards:
-        if i.rank == pile.cards[-1].rank or i.suit == pile.cards[-1].suit:
+        if i.rank == pile.cards[-1].rank or i.suit == pile.cards[-1].suit or i.rank == "Eight":
             playable_cards.append(str(i))
     if playable_cards == []:
         print("No cards in your hand are playable, proceeding to draw a card.")
