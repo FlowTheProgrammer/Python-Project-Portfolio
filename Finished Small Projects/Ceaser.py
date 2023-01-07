@@ -1,5 +1,3 @@
-#Make bruteforce output neater
-
 import os
 
 #Dict of letters
