@@ -185,6 +185,7 @@ def keyDecode():
 
 #Prints out every variation
 def bruteForceDecode():
+    listOfDecodes = []
     print("Welcome to the Bruteforce Decoder!")
     print("--------------------------\n")
 
@@ -212,13 +213,12 @@ def bruteForceDecode():
                     newMessage = newMessage + key
             else:
                 newMessage = newMessage + i
-        print("\nThe decoded message is!\n")
-        print(newMessage)
+        listOfDecodes.append(newMessage)
         newMessage = ''
         code_number += 1
-
-
-
+    print("\nHere are all the possible variations of the message!:\n")
+    for i in listOfDecodes:
+        print(i)
 
 
 #Init
