@@ -1,8 +1,6 @@
 """
 Simple Crazy Eights-like game
 
-* Pick-up/Put-down not implimented (A player should be able given the option to place down a card if they picked up a card of matching suit/rank as the card in play)
-
 House Rules:
 
 Player can either pick up one card or play a card
@@ -169,7 +167,19 @@ def player_play(player,pile,deck,wild="null"):
 #Function to allow a player to draw a card
 def player_draw(player,pile,deck):
     player.add_card(deck.deal_one_card(player,pile,deck))
-    print("You new hand is: ")
+    if player.cards[-1].suit == pile.cards[-1].suit or player.cards[-1].rank == pile.cards[-1].rank:
+        while True:
+            user_input = input(f"\nThe card you picked up is the {str(player.cards[-1])} would you like to place it down? Yes or No?")
+            if user_input.lower() == "no":
+                break
+            elif user_input.lower() == "yes":
+                null = input(f"Placing down {player.cards[-1]}. Press Enter to Continue.:\n")
+                pile.add_card(player.place_card(-1))
+                break
+            else:
+               print("I don't understand your input, Try Again.\n")
+
+    print("You Hand: ")
     hand = []
     for card in player.cards:
         hand.append(str(card))
