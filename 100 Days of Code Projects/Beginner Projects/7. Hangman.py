@@ -2,7 +2,7 @@
 Hangman game
 Loops/List/If-statements
 
-Used some advanced function for simplicity
+Used some advanced functions for simplicity
 """
 from random_word import RandomWords
 
