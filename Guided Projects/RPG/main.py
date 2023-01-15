@@ -14,7 +14,7 @@ class Game:
         self.level = Level() 
 
     def run(self):
-        while True:
+        while True: 
             for event in pygame.event.get():
                 #Checks if game will be closed
                 if event.type == pygame.QUIT:
