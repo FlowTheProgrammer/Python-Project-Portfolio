@@ -64,6 +64,16 @@ def allResources(item):
                     break
     return allGood
 
+def depleteResource(item):
+    for i in MENU:
+        if i  == item:
+            for x in MENU[item]['ingredients']:
+                for y in resources:
+                    if x == y:
+                        resources[y] = resources[y] - MENU[item]['ingredients'][x]
+
+
+
 
 def coin_Pay(menu,item):
     price = 0
@@ -78,6 +88,9 @@ def coin_Pay(menu,item):
     if price >= menu[item]['cost'] and allResources(item):
         if price > menu[item]['cost']:
             print(f"Purchase Successful! Your change is {price - menu[item]['cost']}")
+            depleteResource(item)
+        else:
+            depleteResource(item)
         return True
     elif price >= menu[item]['cost'] and not allResources(item):
         print("Not enough Ingredients!")
