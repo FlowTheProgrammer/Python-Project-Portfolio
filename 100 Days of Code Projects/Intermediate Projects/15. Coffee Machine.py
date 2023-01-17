@@ -50,31 +50,55 @@ def printReport(res):
     print(f"Coffee: {res['coffee']}")
     print(f"Money: {res['money']}")
 
+def allResources(item):
+    allGood = True
+    for key in resources:
+        if key == "money":
+            break
+        for i in MENU[item]['ingredients']:
+            if i == key:
+                if resources[i] >= MENU[item]['ingredients'][i]:
+                    allGood = True
+                else:
+                    allGood = False
+                    break
+    return allGood
+
+
 def coin_Pay(menu,item):
     price = 0
     for i in coinTypes:
         if i != "penny":
-            amount = int(input((f"How many {i}s?: ")))
+            amount = int(input((f"How many {i}s?: "))) * coinTypes[i]
             price += amount
         else:
             amount = int(input(("How many pennies?: ")))
             price += amount
 
-    ig 
-    
-    return True
+    if price >= menu[item]['cost'] and allResources(item):
+        if price > menu[item]['cost']:
+            print(f"Purchase Successful! Your change is {price - menu[item]['cost']}")
+        return True
+    elif price >= menu[item]['cost'] and not allResources(item):
+        print("Not enough Ingredients!")
+        return False
+    elif price < menu[item]['cost'] and allResources(item):
+        print("Not enough coins! Money refunded.")
+        return False
 
- 
+while True:
+    user_input = input("What would you like? Espresso/latte/cappuccino?: ")
+    user_input = user_input.lower()
 
-user_input = input("What would you like? Espresso/latte/cappuccino?: ")
+    while user_input != "espresso" and user_input != "latte" and user_input != "cappuccino" and user_input != 'report' and user_input != 'off':
+        print("I didn't understand your input, try again!")
+        user_input = input("What would you like? Espresso/latte/cappuccino?")
 
-while user_input != "espresso" and user_input != "latte" and user_input != "cappuccino" and user_input != 'report':
-    print("I didn't understand your input, try again!")
-    user_input = input("What would you like? Espresso/latte/cappuccino?")
-
-if user_input.lower() == "report":
-    printReport(resources)
-elif user_input.lower() in MENU:
-    if coin_Pay(MENU,user_input):
-        print("Yay!")
+    if user_input == "report":
+        printReport(resources)
+    if user_input == "off":
+        break
+    elif user_input in MENU:
+        if coin_Pay(MENU,user_input):
+            print(f"Here is your {user_input}! ☕")
 
