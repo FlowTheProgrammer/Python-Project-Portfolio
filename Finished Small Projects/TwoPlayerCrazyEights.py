@@ -244,9 +244,12 @@ while True:
 Playing = True
 init = True
 wild_suit = ""
+start = True
 while Playing:
     os.system('cls')
-    print("Welcome to Crazy Eights\n")
+    if start:
+        print("Welcome to Crazy Eights\n")
+        start = False
     null = input("Player 1 press enter to when ready!")
     os.system('cls')
     player_one_view(player_one_hand,player_two_hand,discard_pile,wild_suit)
