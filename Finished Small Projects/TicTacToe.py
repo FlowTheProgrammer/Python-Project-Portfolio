@@ -98,16 +98,16 @@ while Replay:
     play_again = input("\nWould you like to play again? Type Yes or No.: \n").lower()
     validInputs = ["yes","no",'y','n']
 
-    while play_again not in validInputs:
+    while play_again.lower() not in validInputs:
         os.system('cls')
         print("Sorry, that is not a valid input")
         player1 = input("Would you like to play again? Type Yes or No.:\n").lower()
         os.system('cls')
     
-    if play_again == "y" or play_again == "yes":
+    if play_again.lower() == "y" or play_again.lower() == "yes":
         os.system('cls')
         pass
-    elif play_again == "n" or play_again == "no":
+    elif play_again.lower() == "n" or play_again.lower() == "no":
         os.system('cls')
         print("See ya later!")
         Replay = False
