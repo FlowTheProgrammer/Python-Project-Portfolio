@@ -1,7 +1,5 @@
 """
 Coffee Machine
-
-Not-Finished
 """
 
 MENU = {
@@ -53,6 +51,8 @@ def printReport(res):
 def allResources(item):
     allGood = True
     for key in resources:
+        if allGood == False:
+            break
         if key == "money":
             break
         for i in MENU[item]['ingredients']:
@@ -87,16 +87,19 @@ def coin_Pay(menu,item):
 
     if price >= menu[item]['cost'] and allResources(item):
         if price > menu[item]['cost']:
-            print(f"Purchase Successful! Your change is {price - menu[item]['cost']}")
+            print(f"Purchase Successful! Your change is {round(price - menu[item]['cost'],2)}")
             depleteResource(item)
         else:
             depleteResource(item)
         return True
     elif price >= menu[item]['cost'] and not allResources(item):
-        print("Not enough Ingredients!")
+        print("Not enough Ingredients! Money Refunded.")
         return False
     elif price < menu[item]['cost'] and allResources(item):
         print("Not enough coins! Money refunded.")
+        return False
+    elif price < menu[item]['cost'] and not allResources(item):
+        print("Insufficient funds and ingedients! Money Refunded.")
         return False
 
 while True:
@@ -113,5 +116,6 @@ while True:
         break
     elif user_input in MENU:
         if coin_Pay(MENU,user_input):
+            resources['money'] = resources['money'] + MENU[user_input]['cost']
             print(f"Here is your {user_input}! ☕")
 
