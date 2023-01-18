@@ -50,6 +50,8 @@ def printReport(res):
 
 def allResources(item):
     allGood = True
+    global whatResource
+    whatResource = ''
     for key in resources:
         if allGood == False:
             break
@@ -60,6 +62,7 @@ def allResources(item):
                 if resources[i] >= MENU[item]['ingredients'][i]:
                     allGood = True
                 else:
+                    whatResource = key
                     allGood = False
                     break
     return allGood
@@ -76,6 +79,7 @@ def depleteResource(item):
 
 
 def coin_Pay(menu,item):
+    global whatResource
     price = 0
     for i in coinTypes:
         if i != "penny":
@@ -93,7 +97,7 @@ def coin_Pay(menu,item):
             depleteResource(item)
         return True
     elif price >= menu[item]['cost'] and not allResources(item):
-        print("Not enough Ingredients! Money Refunded.")
+        print(f"Not enough {whatResource}! Money Refunded.")
         return False
     elif price < menu[item]['cost'] and allResources(item):
         print("Not enough coins! Money refunded.")
