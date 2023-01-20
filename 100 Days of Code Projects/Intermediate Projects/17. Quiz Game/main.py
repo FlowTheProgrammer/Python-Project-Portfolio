@@ -8,4 +8,9 @@ for i in question_data:
     qbank.append(nextQuestion)
 
 myQuiz =  theBrain(qbank)
-myQuiz.next_question()
+
+while myQuiz.still_has_questions():
+    myQuiz.next_question()
+
+print("You've completed the quiz!")
+print(f"Your final score was: {myQuiz.score}/{len(question_data)}")
