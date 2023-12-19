@@ -74,35 +74,41 @@ class Pile:
     def return_one_card(self):
         return self.cards.pop(0)
      
-#Displays Player 1's view (# of Opp. Cards, card in play and cards in hand)
 def player_one_view(player1,player2,pile,wild = "null"):
+    """Displays Player 1's view (# of Opp. Cards, card in play and cards in hand)"""
+
+    #Prints the card in play
     print(f"Player 2 has {len(player2.cards)} cards\n")
     if pile.cards[-1].rank == "Eight":
         print("A wild card is in play!\n")
         print(f"The card in play is {str(pile.cards[-1])} but the suit is {wild}!")
     else:
         print(f"The card in play is {str(pile.cards[-1])}")
+    #Prints hand
     print("\nYour Hand:")
     hand = []
     for card in player1.cards:
         hand.append(str(card))
     print(hand)
 
-#Displays Player 2's view (# of Opp. Cards, card in play and cards in hand)
 def player_two_view(player2,player1,pile,wild = "null"):
+    """Displays Player 2's view (# of Opp. Cards, card in play and cards in hand)"""
+
+    #Prints the card in play
     print(f"Player 1 has {len(player1.cards)} cards\n")
     if pile.cards[-1].rank == "Eight":
         print(f"The card in play is {str(pile.cards[-1])} but the suit is {wild}!")
     else:
         print(f"The card in play is {str(pile.cards[-1])}")
+    #Prints hand
     print("\nYour Hand:")
     hand = []
     for card in player2.cards:
         hand.append(str(card))
     print(hand)
 
-#Checks to see if either player has won
 def checkWin(player1,player2):
+    """Checks to see if either player has won"""
     if player1.cards == []:
         return False
     elif player2.cards == []:
@@ -110,12 +116,15 @@ def checkWin(player1,player2):
     else:
         return True
 
-#Function that allows the player to either choose to play or draw
 def choice(player,pile,deck,wild="null"): 
+    """Function that allows the player to either choose to play or draw"""
+    global played
+    #Allows the play to decide to they want to draw a card or play a card
     while True:
         user_input = input("\nWould you like to play a card or draw. Input 'draw' or 'play': \n")
         if user_input.lower() == "play":
             os.system('cls')
+            played = True #Sets played to True (For wild card organization)
             player_play(player,pile,deck,wild)
             break
         elif user_input.lower() == "draw":
@@ -126,24 +135,34 @@ def choice(player,pile,deck,wild="null"):
             print("I don't understand your input, Try Again.\n")
             
 
-
-
-#Function to allow the player to play a card
 def player_play(player,pile,deck,wild="null"):
+    """Function to allow the player to play a card"""
+
+    global played
+
+    #List of Playable Cards
     playable_cards = []
+    #Checks to see the card in play is an Eight, if so, the onlys cards that can be played depend on the wild
     if pile.cards[-1].rank == "Eight":
         for i in player.cards:
             if i.suit == wild or i.rank == "Eight":
                 playable_cards.append(str(i))
+
+    #Adds cards that are playable to your hand
     else:
         for i in player.cards:
             if i.rank == pile.cards[-1].rank or i.suit == pile.cards[-1].suit or i.rank == "Eight":
                 playable_cards.append(str(i))
+
+    #If no playable cards are available, you will draw a card instead
     if playable_cards == []:
         print("No cards in your hand are playable, proceeding to draw a card.")
+        played = False
         null = input("\nPress Enter to Confirm.\n")
         os.system('cls')
         player_draw(player,pile,deck)
+
+    #If playable cards, the player is given a choice to play a card or draw
     else:
         print(playable_cards)
         while True:
@@ -154,6 +173,7 @@ def player_play(player,pile,deck,wild="null"):
                         pile.add_card(player.place_card(count))
                 break
             elif user_input.lower() == "draw":
+                played = False #Played it set to False
                 print("\n Drawing a card instead")
                 null = input("\nPress Enter to Confirm.")
                 os.system('cls')
@@ -163,11 +183,16 @@ def player_play(player,pile,deck,wild="null"):
                print("I don't understand your input, Try Again.\n")
 
 
+def player_draw(player,pile,deck,wild = "null"):
+    """Function to allow a player to draw a card"""
 
-#Function to allow a player to draw a card
-def player_draw(player,pile,deck):
+    global played
+
+    #Adds card to hand
     player.add_card(deck.deal_one_card(player,pile,deck))
-    if player.cards[-1].suit == pile.cards[-1].suit or player.cards[-1].rank == pile.cards[-1].rank:
+
+    #If drawn card matches the suit or rank of the card in play, the player can place it down (For a wild card in play)
+    if pile.cards[-1].rank == "Eight" and (player.cards[-1].suit == wild or player.cards[-1].rank == "Eight"):
         while True:
             user_input = input(f"\nThe card you picked up is the {str(player.cards[-1])} would you like to place it down? Yes or No?")
             if user_input.lower() == "no":
@@ -179,14 +204,29 @@ def player_draw(player,pile,deck):
             else:
                print("I don't understand your input, Try Again.\n")
 
+    #If drawn card matches the suit or rank of the card in play, the player can place it down
+    elif player.cards[-1].suit == pile.cards[-1].suit or player.cards[-1].rank == pile.cards[-1].rank:
+        while True:
+            user_input = input(f"\nThe card you picked up is the {str(player.cards[-1])} would you like to place it down? Yes or No?")
+            if user_input.lower() == "no":
+                break
+            elif user_input.lower() == "yes":
+                played = True;
+                null = input(f"Placing down {player.cards[-1]}. Press Enter to Continue.:\n")
+                pile.add_card(player.place_card(-1))
+                break
+            else:
+               print("I don't understand your input, Try Again.\n")
+
+    #Prints Finished Hand
     print("You Hand: ")
     hand = []
     for card in player.cards:
         hand.append(str(card))
     print(hand)
 
-#Reshuffles deck from pile if out of cards in deck
 def check_deck_count(deck,pile):
+    """Check if deck is empty and if so reshuffles the deck """
     if deck.allCards == []:
         for i in range(len(pile.cards) - 1):
             deck.reshuffle(pile.return_one_card())
@@ -194,11 +234,11 @@ def check_deck_count(deck,pile):
     else:
         pass
 
-#Checks if the card that was played if an Eight and prompts a suit change
 def check_wild(var):
-    global init
+    """Checks if the card that was played is an Eight and prompts a suit change"""
+    global played
     if discard_pile.cards[-1].rank == "Eight":
-        if init:
+        if played:
             while True:
                 change = input("\nWhat suit would you like to change the 8 to (Hearts, Spades, Diamonds or Clubs)?: \n")
                 if change.lower() == "diamonds":
@@ -219,16 +259,20 @@ def check_wild(var):
         else:
             return var
     else:
-        init = True 
+        played = False 
 
 
 #Init (Sets up deck, discard pile and player hands)
 while True:
+
+    #Creates Deck and Discard Pile objects
     newDeck = Deck()
     newDeck.shuffle_deck()
     player_one_hand = Hand()
     player_two_hand = Hand()
     discard_pile = Pile()
+
+    #Deals 5 cards too each player
     for i in range(5):
         player_one_hand.add_card(newDeck.deal_one_card())
         player_two_hand.add_card(newDeck.deal_one_card())
@@ -240,11 +284,13 @@ while True:
         discard_pile.add_card(newDeck.deal_one_card())
     break
 
-#Game Logic - Player Turns
+#Game Variables
 Playing = True
-init = True
-wild_suit = ""
-start = True
+played = False #Bool for if a card was played in the round
+wild_suit = "" #Tracks the suit of the wild card
+start = True #Bool to track the start of a new game
+
+#Game Logic - Player Turns
 while Playing:
     os.system('cls')
     if start:
@@ -252,20 +298,37 @@ while Playing:
         start = False
     null = input("Player 1 press enter to when ready!")
     os.system('cls')
+    #Prints Player View
     player_one_view(player_one_hand,player_two_hand,discard_pile,wild_suit)
+
+    #Allows player to draw or play
     choice(player_one_hand,discard_pile,newDeck,wild_suit)
+
+    #Checks if wild card was played in the round
     wild_suit = check_wild(discard_pile)
     null = input("\nPress Enter to end your turn")
+
+    #Checks for win and reshuffle
     Playing = checkWin(player_one_hand,player_two_hand)
     check_deck_count(newDeck,discard_pile)
+
+    #Game Logic - PLayer 2
     if Playing:
         os.system('cls')
         null = input("Player 2's turn! Press Enter to continue")
         os.system('cls')
+
+        #Prints Player View
         player_two_view(player_two_hand,player_one_hand,discard_pile,wild_suit)
+
+        #Allows player to draw or play
         choice(player_two_hand,discard_pile,newDeck,wild_suit)
+
+        #Checks if wild card was played in the round
         wild_suit = check_wild(discard_pile)
         null = input("\nPress Enter to end your turn")
+
+        #Checks for win and reshuffle
         Playing = checkWin(player_one_hand,player_two_hand)
         check_deck_count(newDeck,discard_pile)
 
