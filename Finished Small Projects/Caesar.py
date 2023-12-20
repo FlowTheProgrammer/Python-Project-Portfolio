@@ -9,9 +9,8 @@ vals = list(alphabet.values())
 
 
 
-
-#Encoder
 def encodeMessage():
+    """Function for encoding a message"""
     print("Welcome to the Encoder!")
     print("-----------------------\n")
 
@@ -29,6 +28,7 @@ def encodeMessage():
                         code_number = int(input("How many times would you like to shift the letters? 1-25: \n"))
                         break
                     except ValueError:
+                        print()
                         print("Invalid Input: Please input a number")
                         print()
             break
@@ -39,6 +39,7 @@ def encodeMessage():
 
     while True:
 
+        #Allows user to choose to shift right or left
         user_input = input("Would you like to encode the message to the left or the right?:\n")
 
         if user_input.lower() == "left":
@@ -58,6 +59,7 @@ def encodeMessage():
 
 
 def messageRight(messageEncode,code,method):
+        """Message right shift decoding/endcoding"""
         #Turns string into a list for easier indexing
         message = []
         newMessage = ''
@@ -66,6 +68,7 @@ def messageRight(messageEncode,code,method):
         
         for i in message:
             if i.lower() in alphabet.keys():
+                #Logic if out of bounds
                 if alphabet[i.lower()] + code >= 26:
                     num = alphabet[i.lower()] + code - 26
                     pos = vals.index(num)
@@ -78,6 +81,7 @@ def messageRight(messageEncode,code,method):
                     newMessage = newMessage + key
             else:
                 newMessage = newMessage + i
+        #Output depending on method
         if method == "encode":
             print("Your new message is!\n")
             print(newMessage)
@@ -90,7 +94,8 @@ def messageRight(messageEncode,code,method):
 
 
 def messageLeft(messageEncode,code,method):
-    #Turns string into a list for easier indexing
+        """Message left shift decoding/endcoding"""
+        #Turns string into a list for easier indexing
         message = []
         newMessage = ''
         for i in messageEncode:
@@ -98,18 +103,20 @@ def messageLeft(messageEncode,code,method):
         
         for i in message:
             if i.lower() in alphabet.keys():
+                #Logic if out of bounds
                 if alphabet[i.lower()] - code <= 0:
                     num = alphabet[i.lower()] - code + 26
                     pos = vals.index(num)
                     key = keys[pos]
                     newMessage = newMessage + key
                 else:
-                    num = alphabet[i.lower()] + code
+                    num = alphabet[i.lower()] - code
                     pos = vals.index(num)
                     key = keys[pos]
                     newMessage = newMessage + key
             else:
                 newMessage = newMessage + i
+        #Output depending on method
         if method == "encode":
             print("Your new message is!\n")
             print(newMessage)
@@ -119,6 +126,7 @@ def messageLeft(messageEncode,code,method):
 
 
 def chooseDecodeMessage():
+    """Prompts user to choose what decode method to use"""
     while True:
 
         user_input = input("Would you like to use a certain key or bruteforce? Type key or bruteforce: \n")
@@ -138,6 +146,7 @@ def chooseDecodeMessage():
 
 
 def keyDecode():
+    """Decodes messages"""
     print("Welcome to the Key Decoder!")
     print("--------------------------\n")
 
@@ -165,6 +174,7 @@ def keyDecode():
 
     while True:
 
+        #Allows the user to choose to shift letters to the rightt of left
         user_input = input("Would you like to decode the message to the left or the right?:\n")
 
         if user_input.lower() == "left":
@@ -180,9 +190,9 @@ def keyDecode():
 
 
 
-
-#Prints out every variation
 def bruteForceDecode():
+    """Prints every variation of caesar shifts"""
+
     listOfDecodes = []
     print("Welcome to the Bruteforce Decoder!")
     print("--------------------------\n")
@@ -190,20 +200,26 @@ def bruteForceDecode():
     message_to_decode = input("Enter the text you would like to decode:\n")
 
     
+    #Splices message into a list
     message = []
     newMessage = ''
     for i in message_to_decode:
         message.append(i)
 
+    #Shift Number
     code_number = 1
+
+    #Shifts letterrs
     for i in range(25):
         for i in message:
             if i.lower() in alphabet.keys():
+                #Logic if shift placement  is over 26
                 if alphabet[i.lower()] + code_number >= 26:
                     num = alphabet[i.lower()] + code_number - 26
                     pos = vals.index(num)
                     key = keys[pos]
                     newMessage = newMessage + key
+                #Shift logic
                 else:
                     num = alphabet[i.lower()] + code_number
                     pos = vals.index(num)
@@ -211,6 +227,7 @@ def bruteForceDecode():
                     newMessage = newMessage + key
             else:
                 newMessage = newMessage + i
+        #Adds the finished message to list of decoded messages
         listOfDecodes.append(newMessage)
         newMessage = ''
         code_number += 1
@@ -222,20 +239,27 @@ def bruteForceDecode():
 #Init
 user_input = ''
 
+#Game Logic
 while True:
 
+    #Prompts user to choose to decode or encode the message
     user_input = input("Would you like to decode or encode a message?:\n")
 
+    #Decode
     if user_input.lower() == "decode":
         os.system('cls')
         chooseDecodeMessage()
         break
+
+    #Encode
     elif user_input.lower() == "encode":
         os.system('cls')
         encodeMessage()
         break
+
     else:
-        print("I don't understand your input, Try Again.\n")
+        os.system('cls')
+        print("I didn't understand your input, Try Again.\n")
 
 
     
