@@ -1,31 +1,113 @@
 import requests
 import tkinter as tk
 from PIL import Image, ImageTk
-from io import BytesIO
+from urllib.request import urlopen
+
+ID = 0;
 
 def createDex(window):
+    """Creates the pokedex layout"""
 
     def getPokemon():
         """Retrieves pokemon by name"""
 
+        #Gets data for the pokemon
         name = searchBar.get()
-
         res = requests.get(f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}/")
 
+        #Error Code Check
         if res.status_code == 200:
+
             myPokemon = res.json()
-            name = name.capitalize()
-            data = f"Name: {name} \nID: {myPokemon['id']}\nSpecies: {myPokemon['genera'][7]['genus']}"
+
+            #Stores ID in global
+            global ID
+            ID = int(myPokemon['id'])
+
+            #Output for data
+            data = f"Name: {myPokemon['name'].capitalize()} \nID: {myPokemon['id']}\nSpecies: {myPokemon['genera'][7]['genus']}"
+
+            #Deletes old output and outputs the new data
             text_box.delete(1.0, tk.END)
             text_box.insert(tk.END, data)
+            createSprite(ID)
+
+        #Outputs and error if pokemon not found
         else:
             data = "Invalid Pokemon. Please try again."
             text_box.delete(1.0, tk.END)
             text_box.insert(tk.END, data)
-    def getNextPokemon():
-        pass
+            
+    def getNextPokemonRight():
+        """Gets data for next pokemon in the dex"""
 
-    """Function to create pokedex"""
+        global ID
+
+        #Gets data for the previous pokemon
+        res = requests.get(f"https://pokeapi.co/api/v2/pokemon-species/{ID + 1}/")
+
+        
+        if res.status_code == 200:
+
+            myPokemon = res.json()
+
+            #Stores ID in global
+            ID = int(myPokemon['id'])
+
+            #Output for data
+            data = f"Name: {myPokemon['name'].capitalize()} \nID: {myPokemon['id']}\nSpecies: {myPokemon['genera'][7]['genus']}"
+
+            #Deletes old output and outputs the new data
+            text_box.delete(1.0, tk.END)
+            text_box.insert(tk.END, data)
+            createSprite(ID)
+
+    def getNextPokemonLeft():
+        """Gets data for previous pokemon in the dex"""
+
+        global ID
+
+        #Gets data for the previous pokemon
+        res = requests.get(f"https://pokeapi.co/api/v2/pokemon-species/{ID - 1}/")
+
+        #Error Code Check
+        if res.status_code == 200:
+
+            myPokemon = res.json()
+
+            #Stores ID in global
+            ID = int(myPokemon['id'])
+
+            #Output for data
+            data = f"Name: {myPokemon['name'].capitalize()} \nID: {myPokemon['id']}\nSpecies: {myPokemon['genera'][7]['genus']}"
+
+            #Deletes old output and outputs the new data
+            text_box.delete(1.0, tk.END)
+            text_box.insert(tk.END, data)
+            createSprite(ID)
+
+    def createSprite(sprite):
+        """Function to get sprite from api"""
+
+        #Gets pokemon
+        res = requests.get(f"https://pokeapi.co/api/v2/pokemon-form/{sprite}/")
+
+        #Gets link for sprite
+        myPokemon = res.json()
+        sprite = myPokemon["sprites"]["front_default"]
+
+        #Reads the data from the api link
+        u = urlopen(sprite)
+        raw_data = u.read()
+        u.close()
+
+        #Sets sprite to the sprite_label
+        photo = ImageTk.PhotoImage(data = raw_data)
+        sprite_label.config(image=photo)
+        sprite_label.image = photo
+
+
+    #Creates outline for the Dex
     window.title("PokeDex")
     window.geometry("365x500")
 
@@ -45,16 +127,20 @@ def createDex(window):
     clickButton = tk.Button(red_frame, text = "Submit", command = getPokemon)
     clickButton.grid(row = 5, column = 0, columnspan = 2, padx = 10, pady = 10)
 
-    right_arrow_button = tk.Button(red_frame, text="->", command=getNextPokemon)
+    #Creats a right arrow button for navigation
+    right_arrow_button = tk.Button(red_frame, text="->", command=getNextPokemonRight)
     right_arrow_button.grid(row = 5, column = 1, columnspan = 1, padx = 5, pady = 10)
 
-    left_arrow_button = tk.Button(red_frame, text="<-", command=getNextPokemon)
+    #Creats a left arrow button for navigation
+    left_arrow_button = tk.Button(red_frame, text="<-", command=getNextPokemonLeft)
     left_arrow_button.grid(row = 5, column = 0, columnspan = 1, padx = 5, pady = 10)
 
+    #Creats an image box to view sprite
+    sprite_label =  tk.Label(red_frame)
+    sprite_label.grid(row=2, column=0, columnspan=2, pady=10)
 
+
+#Main Code - Creates Pokedex
 window = tk.Tk()
 createDex(window)
 window.mainloop()
-
-
-
