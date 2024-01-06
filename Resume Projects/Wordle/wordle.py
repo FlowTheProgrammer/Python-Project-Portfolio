@@ -63,7 +63,7 @@ class GameBoard(tk.Tk):
 
             for j in range(5):
                 box = tk.Text(frame, width=8, height = 4, 
-                              font=("Helvetica", 13, "bold"), fg = 'white', background=BG_COLOR)
+                              font=("Helvetica", 13, "bold"), fg = 'white', background=BG_COLOR, state= 'disabled')
                 box.grid(row=i, column=j, padx=1, pady=1)
                 box_in_row.append(box)
                 
@@ -100,9 +100,11 @@ class GameBoard(tk.Tk):
         if not self.game_end:
             if self. current_col < 5:
 
+                self.boxes[self.current_row][self.current_col].config(state='normal')
                 self.boxes[self.current_row][self.current_col].tag_configure("center", justify='center')
                 self.boxes[self.current_row][self.current_col].insert(tk.END, f'\n\n{letter}')
                 self.boxes[self.current_row][self.current_col].tag_add("center", "1.0", "end")
+                self.boxes[self.current_row][self.current_col].config(state='disabled')
                 self.current_col +=1
                 self.current_letters += 1
                 self.word += letter
@@ -113,7 +115,9 @@ class GameBoard(tk.Tk):
             if self.current_col > 0:
                 self.current_col -= 1
                 self.current_letters -= 1
+                self.boxes[self.current_row][self.current_col].config(state='normal')
                 self.boxes[self.current_row][self.current_col].delete(1.0, tk.END)
+                self.boxes[self.current_row][self.current_col].config(state='disabled')
                 self.word = self.word[:-1]
             else:
                 if self.current_letters == 1:
