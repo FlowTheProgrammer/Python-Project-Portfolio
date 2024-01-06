@@ -21,16 +21,22 @@ qwerty_layout = [
     'ZXCVBNM'
 ]
 
+keyboard_dict = {
+    'q': 0, 'w': 1, 'e': 2, 'r': 3, 't': 4, 'y': 5, 'u': 6, 'i': 7, 'o': 8, 'p': 9,
+    'a': 10, 's': 11, 'd': 12, 'f': 13, 'g': 14, 'h': 15, 'j': 16, 'k': 17, 'l': 18,
+    'z': 19, 'x': 20, 'c': 21, 'v': 22, 'b': 23, 'n': 24, 'm': 25
+}
 
 
 class GameBoard(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Wordle Game")
-        self.geometry("800x1200")
+        self.geometry("1920x1080")
 
         #Variables
         self.boxes = []
+        self.buttons = []
         self.current_row = 0
         self.current_col = 0
         self.current_letters = 0
@@ -60,8 +66,8 @@ class GameBoard(tk.Tk):
             box_in_row = []
 
             for j in range(5):
-                box = tk.Text(frame, width=12, height = 6, 
-                              font=("Helvetica", 12, "bold"), fg = 'white', background=BG_COLOR)
+                box = tk.Text(frame, width=8, height = 4, 
+                              font=("Helvetica", 13, "bold"), fg = 'white', background=BG_COLOR)
                 box.grid(row=i, column=j, padx=1, pady=1)
                 box_in_row.append(box)
                 
@@ -77,6 +83,7 @@ class GameBoard(tk.Tk):
                                    command=lambda l=letter: self.add_Letter(l) ,
                                    bg='grey', fg = 'white', font = ('bold'))
                 button.pack(side=tk.LEFT, padx=2)
+                self.buttons.append(button)
         
 
         #Frame for Backspace and Enter
@@ -119,7 +126,7 @@ class GameBoard(tk.Tk):
                 self.boxes[self.current_row][self.current_col].delete(1.0, tk.END)
 
     def get_random_word(self):
-        with open('WIP Projects\Wordle/answers.txt', 'r') as file:
+        with open('WIP Projects\Wordle/word-list.txt', 'r') as file:
                 content = file.read().split()
                 return random.choice(content)
 
@@ -156,6 +163,7 @@ class GameBoard(tk.Tk):
         self.cpy_word = self.word
         for index, letter in enumerate(self.word.lower()):
             if self.word.lower()[index] == self.check_answer[index]:
+                    self.buttons[keyboard_dict[letter]].config(bg=RIGHT_COLOR)
                     self.check_answer = self.check_answer[:index] + '?' + self.check_answer[index + 1:]
                     self.cpy_word = self.cpy_word[:index] + '!' + self.cpy_word[index + 1:]
                     self.boxes[self.current_row][index].config(bg=RIGHT_COLOR)
@@ -183,19 +191,23 @@ class GameBoard(tk.Tk):
     def where_in_position(self,index):
         print(self.check_answer)
         if self.cpy_word.lower()[index] not in self.check_answer:
+            if self.cpy_word.lower()[index] != "!":
+                self.buttons[keyboard_dict[self.cpy_word.lower()[index]]].config(bg = WRONG_COLOR)
             return "none"
+        
         elif self.cpy_word.lower()[index] in self.check_answer:
             self.check_answer = self.check_answer.replace(self.cpy_word.lower()[index],'?',1)
+            self.buttons[keyboard_dict[self.cpy_word.lower()[index]]].config(bg = IN_WORD_COLOR)
             return 'in'
+        
 
     def checkLoss(self):
         if self.current_row >= 6:
             messagebox.showerror('Oops!', f'You lost! The answer was {self.answer}')
             self.game_end = True
-                
-
+            
         
 
-#Came Creation
+#Game Creation
 myBoard = GameBoard()
 myBoard.mainloop()
