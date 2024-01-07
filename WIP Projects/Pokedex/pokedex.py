@@ -2,6 +2,7 @@ import requests
 import tkinter as tk
 from PIL import Image, ImageTk
 from urllib.request import urlopen
+from deepfake import getName, getLogin
 
 ID = 0;
 
@@ -24,13 +25,17 @@ def createDex(window):
             global ID
             ID = int(myPokemon['id'])
 
+            Name = myPokemon['name'].capitalize()
+            Species = myPokemon['genera'][7]['genus']
+
             #Output for data
-            data = f"Name: {myPokemon['name'].capitalize()} \nID: {myPokemon['id']}\nSpecies: {myPokemon['genera'][7]['genus']}"
+            data = f"Name: {Name} \nID: {ID}\nSpecies: {Species}"
 
             #Deletes old output and outputs the new data
             text_box.delete(1.0, tk.END)
             text_box.insert(tk.END, data)
             createSprite(ID)
+            getName(f"{Name}, The {Species}")
 
         #Outputs and error if pokemon not found
         else:
@@ -53,6 +58,8 @@ def createDex(window):
 
             #Stores ID in global
             ID = int(myPokemon['id'])
+            Name = myPokemon['name'].capitalize()
+            Species = myPokemon['genera'][7]['genus']
 
             #Output for data
             data = f"Name: {myPokemon['name'].capitalize()} \nID: {myPokemon['id']}\nSpecies: {myPokemon['genera'][7]['genus']}"
@@ -61,6 +68,7 @@ def createDex(window):
             text_box.delete(1.0, tk.END)
             text_box.insert(tk.END, data)
             createSprite(ID)
+            getName(f"{Name}, The {Species}")
 
     def getNextPokemonLeft():
         """Gets data for previous pokemon in the dex"""
@@ -78,6 +86,9 @@ def createDex(window):
             #Stores ID in global
             ID = int(myPokemon['id'])
 
+            Name = myPokemon['name'].capitalize()
+            Species = myPokemon['genera'][7]['genus']
+
             #Output for data
             data = f"Name: {myPokemon['name'].capitalize()} \nID: {myPokemon['id']}\nSpecies: {myPokemon['genera'][7]['genus']}"
 
@@ -85,6 +96,7 @@ def createDex(window):
             text_box.delete(1.0, tk.END)
             text_box.insert(tk.END, data)
             createSprite(ID)
+            getName(f"{Name}, The {Species}")
 
     def createSprite(sprite):
         """Function to get sprite from api"""
@@ -103,7 +115,7 @@ def createDex(window):
 
         #Sets sprite to the sprite_label
         photo = ImageTk.PhotoImage(data = raw_data)
-        sprite_label.config(image=photo)
+        sprite_label.config(image=photo , bg = 'red')
         sprite_label.image = photo
 
 
@@ -136,11 +148,12 @@ def createDex(window):
     left_arrow_button.grid(row = 5, column = 0, columnspan = 1, padx = 5, pady = 10)
 
     #Creats an image box to view sprite
-    sprite_label =  tk.Label(red_frame)
-    sprite_label.grid(row=2, column=0, columnspan=2, pady=10)
+    sprite_label =  tk.Label(red_frame,bg= 'red')
+    sprite_label.grid(row=2, column=0, columnspan=2, pady=5)
 
 
 #Main Code - Creates Pokedex
 window = tk.Tk()
 createDex(window)
+getLogin()
 window.mainloop()
