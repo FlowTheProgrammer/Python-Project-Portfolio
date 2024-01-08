@@ -1,8 +1,6 @@
 from fakeyou import FakeYou
 import requests
-import os
 from pygame import mixer
-import pygame
 import tempfile
 
 global username
@@ -20,7 +18,12 @@ def getName(name):
     thisClass = FakeYou()
     try:
         thisClass.login(username= username, password = password)
-        audio = thisClass.say(text=name, ttsModelToken="TM:f99ax42k43fg")
+
+        #Morgan Freeman
+        audio = thisClass.say(text=name, ttsModelToken="TM:0805g5ejkxr1")
+
+        #Pokedex Audio
+        #audio = thisClass.say(text=name, ttsModelToken="TM:f99ax42k43fg")
 
         this_audio = requests.get(audio.link,stream=True)
 
