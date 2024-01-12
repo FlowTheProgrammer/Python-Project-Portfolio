@@ -12,7 +12,8 @@ import random
 import os
 
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs') 
-ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace') 
+ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
+played = False #Bool for if a card was played in the round
 
 #Card Class - Creates Cards
 class Card():
@@ -119,7 +120,7 @@ def choice(player,pile,deck,wild="null"):
             break
         elif user_input.lower() == "draw":
             os.system('cls')
-            player_draw(player,pile,deck)
+            player_draw(player,pile,deck,wild)
             break
         else:
             print("I don't understand your input, Try Again.\n")
@@ -150,7 +151,7 @@ def player_play(player,pile,deck,wild="null"):
         played = False
         null = input("\nPress Enter to Confirm.\n")
         os.system('cls')
-        player_draw(player,pile,deck)
+        player_draw(player,pile,deck,wild)
 
     #If playable cards, the player is given a choice to play a card or draw
     else:
@@ -182,20 +183,12 @@ def player_draw(player,pile,deck,wild = "null"):
     player.add_card(deck.deal_one_card(player,pile,deck))
 
     #If drawn card matches the suit or rank of the card in play, the player can place it down (For a wild card in play)
-    if pile.cards[-1].rank == "Eight" and (player.cards[-1].suit == wild or player.cards[-1].rank == "Eight"):
-        while True:
-            user_input = input(f"\nThe card you picked up is the {str(player.cards[-1])} would you like to place it down? Yes or No?")
-            if user_input.lower() == "no":
-                break
-            elif user_input.lower() == "yes":
-                null = input(f"Placing down {player.cards[-1]}. Press Enter to Continue.:\n")
-                pile.add_card(player.place_card(-1))
-                break
-            else:
-               print("I don't understand your input, Try Again.\n")
+    if pile.cards[-1].rank == "Eight": #Nested to skip over elif to avoid errors
+        if (player.cards[-1].suit == wild or player.cards[-1].rank == "Eight"):
+            pickupPlay(player,pile)
 
     #If drawn card matches the suit or rank of the card in play, the player can place it down
-    elif player.cards[-1].suit == pile.cards[-1].suit or player.cards[-1].rank == pile.cards[-1].rank:
+    elif player.cards[-1].suit == pile.cards[-1].suit or player.cards[-1].rank == pile.cards[-1].rank or player.cards[-1].rank == "Eight":
         pickupPlay(player,pile)
 
     #Prints Finished Hand
@@ -207,6 +200,7 @@ def player_draw(player,pile,deck,wild = "null"):
 
 
 def pickupPlay(player,pile):
+    global played
     """If drawn card matches the suit or rank of the card in play, the player can place it down"""
     while True:
             user_input = input(f"\nThe card you picked up is the {str(player.cards[-1])} would you like to place it down? Yes or No?")

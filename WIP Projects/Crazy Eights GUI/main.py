@@ -2,6 +2,11 @@ from TwoPlayerCrazyEights import Deck, Hand, Pile
 from TwoPlayerCrazyEights import choice,playerView,check_wild,check_deck_count,checkWin
 import os
 
+#Game Variables
+Playing = True
+wild_suit = "" #Tracks the suit of the wild card
+start = True #Bool to track the start of a new game
+
 #Init (Sets up deck, discard pile and player hands)
 while True:
 
@@ -22,12 +27,6 @@ while True:
         newDeck.shuffle_deck()
         discard_pile.add_card(newDeck.deal_one_card())
     break
-
-#Game Variables
-Playing = True
-played = False #Bool for if a card was played in the round
-wild_suit = "" #Tracks the suit of the wild card
-start = True #Bool to track the start of a new game
 
 def gameFlow(player):
     global wild_suit
