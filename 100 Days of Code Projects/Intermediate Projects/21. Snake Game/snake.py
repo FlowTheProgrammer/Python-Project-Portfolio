@@ -8,7 +8,10 @@ class Snake():
 
         self.positions = [(0,0),(-20,0),(-40,0)]
 
+        self.createSnake()
+
         #Snake Body Creation
+    def createSnake(self):
         for i in self.positions:
             self.createSegment(i)
 
@@ -45,3 +48,9 @@ class Snake():
 
     def extendBody(self):
         self.createSegment(self.snake_body[-1].position())
+
+    def reset(self):
+        for i in self.snake_body:
+            i.goto(2000,2000)
+        self.snake_body.clear()
+        self.createSnake()

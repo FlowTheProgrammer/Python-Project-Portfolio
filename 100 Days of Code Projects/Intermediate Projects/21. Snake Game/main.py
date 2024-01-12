@@ -39,17 +39,20 @@ while game_on:
         game_snake.extendBody()
 
     if head.xcor() > 395 or head.xcor() < -395:
-        game_on = False
-        scoreboard.gameOver()
+        game_snake.reset()
+        head = game_snake.snake_body[0]
+        scoreboard.newGame()
 
     if head.ycor() > 395 or head.ycor() < -395:
-        game_on = False
-        scoreboard.gameOver()
+        game_snake.reset()
+        head = game_snake.snake_body[0]
+        scoreboard.newGame()
 
     for segment in game_snake.snake_body[1:]:
         if head.distance(segment) < 15:
-            game_on = False
-            scoreboard.gameOver()
+            game_snake.reset()
+            head = game_snake.snake_body[0]
+            scoreboard.newGame()
     
 
 myScreen.exitonclick()      
