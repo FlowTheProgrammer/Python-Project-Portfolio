@@ -9,7 +9,6 @@ ID = 0;
 
 def createDex(window):
 
-
     def requestPokemon(type):
         global ID
         if type == "submit":
@@ -33,14 +32,14 @@ def createDex(window):
             data_entry = getPokemonEntry(myPokemon['flavor_text_entries'])
             
             #Output for data
-            data = f"Name: {Name} \nID: {ID}\nSpecies: {Species}\n\n{data_entry}"
+            data = f"Name: {Name} \nID: {ID}\nSpecies: {Species}\n\nData Entry:\n\n{data_entry}"
 
             #Deletes old output and outputs the new data
             text_box.delete(1.0, tk.END)
             text_box.insert(tk.END, data)
 
             createSprite(ID)
-            getName(f"{Name}, The {Species}")
+            getName(f"{data_entry}")
         else:
             data = "Invalid Pokemon. Please try again."
             text_box.delete(1.0, tk.END)
