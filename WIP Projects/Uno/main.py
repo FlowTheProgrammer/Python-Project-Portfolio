@@ -10,7 +10,7 @@ Winner is determined by the first person to get rid of all their cards
 """
 
 from Uno import Deck, Hand, Pile
-from Uno import choice,playerView,check_wild,check_deck_count,checkWin,skipPlayer,reversePlayer,drawCards
+from Uno import choice,playerView,check_wild,check_deck_count,checkWin,skipPlayer,reversePlayer,drawCards,returnTopCard
 import os
 
 #Game Variables
@@ -20,12 +20,10 @@ start = True #Bool to track the start of a new game
 players = []
 cant_start = ['Wild','Reverse','Skip',"+2",'+4']
 winner = ''
-
-#Player who is playing
 who_is_playing = 1
 direction = 1
 
-#ADD ERROR CHECKING
+
 while True:
     try:
         amt = int(input("How many players will be playing?: "))
@@ -33,7 +31,7 @@ while True:
             break
         else:
             os.system('cls')
-            null = input("Enter a number from 2-10. Press Enter to Continue")
+            null = input("Please enter a number from 2-10. Press Enter to Continue")
             os.system('cls')
     except:
         os.system('cls')
@@ -77,7 +75,7 @@ def gameFlow(player):
     playerView(position,player_hand,players,discard_pile,wild_suit)
 
     #Allows player to draw or play
-    choice(position,player_hand,discard_pile,newDeck,wild_suit)
+    choice(position,player_hand,players,discard_pile,newDeck,wild_suit)
 
     #Checks if wild card was played in the round
     wild_suit = check_wild(wild_suit,discard_pile)
@@ -87,11 +85,19 @@ def gameFlow(player):
     Playing = checkWin(players)
     check_deck_count(newDeck,discard_pile)
 
-    return (skipPlayer(),reversePlayer())
+    return (skipPlayer(),reversePlayer(),drawCards())
 
+
+#EDIT SO IT SAYS WHO WAS SKI{{ED}}
 def gamePenalty(type):
-    
-    pass
+    global players
+    os.system('cls')
+    if type == "skipped":
+        null = input("Oh no your turn was skipped! Press Enter to end your turn.")
+    elif type == "reversed":
+        null = input(f"The game was reveresed! Player {players[who_is_playing - 1][0]} it is your turn!") #DONE
+    elif type == "draw":
+        null = input(f"You have to draw! {returnTopCard(discard_pile)}") #THIS NEEDS TO BE EDITED SO THAT ITS GIVES PLAYED CARDS, SAYS NAME AND (PLACEHOLDER)
 
 def checkPlaying():
     global who_is_playing
@@ -117,7 +123,7 @@ while Playing:
         if start:
             print("Uno Game!\n")
             start = False
-        skipped,reversed = gameFlow(player)
+        skipped,reversed,plus_cards = gameFlow(player)
         winner = player[0] #To keep track of turn: If end on this turn, thefore winner
 
         if skipped:
@@ -135,6 +141,11 @@ while Playing:
                 who_is_playing += (1 * direction)
                 checkPlaying()
                 gamePenalty('reversed')
+
+        elif plus_cards:
+            who_is_playing += (2 * direction)
+            checkPlaying()
+            gamePenalty('draw')
 
         else:
             who_is_playing += (1 * direction)

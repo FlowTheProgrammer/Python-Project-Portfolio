@@ -120,7 +120,7 @@ def checkWin(players):
             return True
 
 
-def choice(pos,player_hand,pile,deck,wild="null"): 
+def choice(pos,player_hand,players,pile,deck,wild="null"): 
     """Function that allows the player to either choose to play or draw"""
     global played
     #Allows the play to decide to they want to draw a card or play a card
@@ -136,7 +136,11 @@ def choice(pos,player_hand,pile,deck,wild="null"):
             player_draw(pos,player_hand,pile,deck,wild)
             break
         else:
-            print("I don't understand your input, Try Again.\n")
+            os.system('cls')
+            null =  input("Unknown input. Press Enter to Try Again. \n")
+            os.system('cls')
+            playerView(pos,player_hand,players,pile,wild)
+
             
 
 def player_play(pos,player_hand,pile,deck,wild="null"):
@@ -179,9 +183,9 @@ def player_play(pos,player_hand,pile,deck,wild="null"):
                     if str(i) == user_input:
                         if i.rank == 'Skip':
                             skipped = True
-                        if i.rank == "Reverse":
+                        elif i.rank == "Reverse":
                             reversed = True
-                        if i.rank == '+4' or i.rank == "+2":
+                        elif i.rank == '+4' or i.rank == "+2":
                             needs_to_draw = True
                         pile.add_card(player_hand.place_card(count))
                 break
@@ -200,6 +204,7 @@ def player_draw(pos,player_hand,pile,deck,wild = "null"):
     """Function to allow a player to draw a card"""
 
     global played
+    
 
     #Adds card to hand
     player_hand.add_card(deck.deal_one_card(player_hand,pile,deck))
@@ -222,13 +227,25 @@ def player_draw(pos,player_hand,pile,deck,wild = "null"):
 
 
 def pickupPlay(player_hand,pile):
-    global played
+
     """If drawn card matches the color or rank of the card in play, the player can place it down"""
+
+    global played
+    global skipped
+    global reversed
+    global needs_to_draw
+
     while True:
             user_input = input(f"\nThe card you picked up is the {str(player_hand.cards[-1])} would you like to place it down? Yes or No?")
             if user_input.lower() == "no":
                 break
             elif user_input.lower() == "yes":
+                if player_hand.cards[-1].rank == 'Skip':
+                        skipped = True
+                elif player_hand.cards[-1].rank == "Reverse":
+                        reversed = True
+                elif player_hand.cards[-1].rank == '+4' or player_hand.cards[-1].rank == "+2":
+                        needs_to_draw = True
                 played = True
                 null = input(f"Placing down {player_hand.cards[-1]}. Press Enter to Continue.:\n")
                 pile.add_card(player_hand.place_card(-1))
@@ -254,7 +271,7 @@ def check_wild(var,pile):
         if played:
             while True:
                 played = False
-                change = input("\nWhat color would you like to changeto (Blue, Green, Yellow, or Red)?: \n")
+                change = input("\nWhat color would you like to change to (Blue, Green, Yellow, or Red)?: \n")
                 if change.lower() == "blue":
                     print("Changing to blue!\n")
                     return "Blue"
@@ -268,7 +285,9 @@ def check_wild(var,pile):
                     print("Changing to red!\n")
                     return "Red"
                 else:
-                    print("I don't understand your input, Try Again.\n")
+                    os.system('cls')
+                    null = input("I don't understand your input. Press Enter to Try Again.\n")
+                    os.system('cls')
                     
         else:
             return var
@@ -277,6 +296,7 @@ def check_wild(var,pile):
 
 
 def skipPlayer():
+    """Returns if a player placed a skip that turn"""
     global skipped
 
     cpy = skipped
@@ -286,6 +306,7 @@ def skipPlayer():
 
 
 def reversePlayer():
+    """Returns if a player placed a reverse card that turn"""
     global reversed
 
     cpy = reversed
@@ -300,5 +321,9 @@ def drawCards():
 
     cpy = needs_to_draw
     needs_to_draw = False
-    
+
     return cpy
+
+def returnTopCard(pile):
+
+    return pile.cards[-1].rank
