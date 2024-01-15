@@ -229,7 +229,7 @@ def pickupPlay(player_hand,pile):
             if user_input.lower() == "no":
                 break
             elif user_input.lower() == "yes":
-                played = True;
+                played = True
                 null = input(f"Placing down {player_hand.cards[-1]}. Press Enter to Continue.:\n")
                 pile.add_card(player_hand.place_card(-1))
                 break
